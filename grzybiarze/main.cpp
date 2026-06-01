@@ -1,27 +1,51 @@
 #include <vector>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <memory>
 
-class Mushroom{};
+class Object :public sf::Sprite{
+public:
+    Object(){};
+};
+
+class Mushroom : public Object{
+public:
+    Mushroom(sf::RenderWindow& window, std::string &arg_tekstura) :
+        points_for(0),window(window)
+    {
+        sf::FloatRect rectangle_bounds = getGlobalBounds();
+        tekstura.loadFromFile(arg_tekstura);
+        setTexture(tekstura);
+        setPosition(rand()%window.getSize().x-rectangle_bounds.width, rand()%window.getSize().y-rectangle_bounds.height);
+        setScale(0.05, 0.05);
+    }
+    ~Mushroom(){};
+    int Get_points(){
+        return points_for;
+    }
+private:
+    int points_for;
+    sf::RenderWindow& window;
+    sf::Texture tekstura;
+    friend class Cmap;
+};
+
 class Przeszkoda{
     //obiekty, przez które nie można przenikać np. drzewa
 };
 class Bush{
     // krzak malin, można przenikać ale spowalnia
 };
-class CMap
-{
-    //plansza
-};
+
 class Booster{};
 
-class Character : public sf::Sprite {
+class Character : public Object {
 public:
-    Character(const sf::Vector3f& velocity, sf::RenderWindow& window, sf::Texture &tekstura) :
+    Character(const sf::Vector3f& velocity, sf::RenderWindow& window, std::string &arg_tekstura) :
         velocity(velocity), window(window), points(0), high_score(0)
     {
+        tekstura.loadFromFile(arg_tekstura);
         setTexture(tekstura);
         setScale(0.3, 0.3);
         setTextureRect(sf::IntRect(0, 0, 150, 190));
@@ -48,30 +72,77 @@ public:
             setTextureRect(sf::IntRect(0, 200, 150, 190));
         }
     }
+void add_points(int points_to_add)
+    {
+    points += points_to_add;
+    }
 private:
     sf::Vector3f velocity;
     sf::RenderWindow& window;
+    sf::Texture tekstura;
     int points;     //to na później
     int high_score;
+    friend class Cmap;
+};
+
+class CMap
+{
+public:
+    CMap(sf::RenderWindow& window, std::string tex_character,std::string tex_mushroom) :
+        window(window), my_mushroom(window,tex_mushroom)
+    {
+        for(int i=0; i<4; i++)
+        graphicobjects.emplace_back(new Mushroom(window,tex_mushroom)); //dodajemy 4 grzyby do narysowania
+
+        my_character = new Character(sf::Vector3f(3000, 3000, 0), window, tex_character);
+    }
+
+std::vector<Object*> to_draw()
+    {
+    return graphicobjects;
+    }
+
+Character* player()
+    {
+    return my_character;
+    }
+
+    void pick_mushrooms() //sprawdzamy czy postac dotyka grzybka, jesli tak to go usuwamy z wektora
+    {
+        for (auto &s : graphicobjects)
+        {
+            sf::FloatRect boundingBox = my_character->getGlobalBounds();
+            if(boundingBox.contains(s->getPosition()))
+            {
+                graphicobjects.erase(std::remove(graphicobjects.begin(), graphicobjects.end(), s), graphicobjects.end());;
+            }
+        }
+    }
+
+private:
+    sf::RenderWindow& window;
+    Character* my_character;
+    Mushroom my_mushroom;
+    std::vector<Object*> graphicobjects;
 };
 
 int main() {
     // create the window
     sf::RenderWindow window(sf::VideoMode(1000, 800), "My window");
 
-    //std::vector<sf::Drawable*> DrawableObjects; //wektor objektów do narysowania
 
-    sf::Texture tekstura_postac;                            //ładowanie tekstur
-    tekstura_postac.loadFromFile("./postacprzyklad.png");
-    tekstura_postac.setRepeated(true);
+    std::string tex1="./gzib.png";
+    std::string tex2="./postacprzyklad.png";
+
     sf::Texture grass;
     grass.loadFromFile("./grass.png");
     grass.setRepeated(true);
 
-    Character postac(sf::Vector3f(3000, 3000, 0), window, tekstura_postac); //tworzenie obiektów
-    sf::Sprite plansza;
-    plansza.setTexture(grass);
-    plansza.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+
+    sf::Sprite bg;
+    bg.setTexture(grass);
+    bg.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+    CMap plansza1(window,tex2,tex1);
 
     sf::Clock clock;
 
@@ -86,22 +157,29 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)||sf::Keyboard::isKeyPressed(sf::Keyboard::W)) //chodzenie WSAD lub strzałki
-                    postac.animate(elapsed,'w');
+                    plansza1.player()->animate(elapsed,'w');
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)||sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                postac.animate(elapsed,'s');
+                plansza1.player()->animate(elapsed,'s');
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)||sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                    postac.animate(elapsed,'a');
+                    plansza1.player()->animate(elapsed,'a');
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)||sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-                postac.animate(elapsed,'d');
+                plansza1.player()->animate(elapsed,'d');
             }
         }
+
+        plansza1.pick_mushrooms();
 
 
         // clear the window with black color
         window.clear(sf::Color::Black);
+        //rysowanie wszystkiego
+        window.draw(bg);
+        for (auto &s : plansza1.to_draw())
+        {
+            window.draw(*s);
+        }
+        window.draw(*plansza1.player());
 
-        window.draw(plansza);       //rysowanie obiektów
-        window.draw(postac);
         // end the current frame
         window.display();
     }

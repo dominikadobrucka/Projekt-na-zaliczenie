@@ -1,0 +1,4 @@
+100
+1	osiagniecie1
+0	osiagniecie2
+1	osiagniecie3

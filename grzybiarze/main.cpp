@@ -2,6 +2,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
 //#include <memory>
 
 class Object :public sf::Sprite{
@@ -12,7 +13,7 @@ public:
 class Mushroom : public Object{
 public:
     Mushroom(sf::RenderWindow& window, std::string &arg_tekstura) :
-        points_for(0),window(window)
+        points_for(10),window(window)
     {
         sf::FloatRect rectangle_bounds = getGlobalBounds();
         tekstura.loadFromFile(arg_tekstura);
@@ -45,7 +46,22 @@ public:
     Character(const sf::Vector3f& velocity, sf::RenderWindow& window, std::string &arg_tekstura) :
         velocity(velocity), window(window), points(0), high_score(0)
     {
-        tekstura.loadFromFile(arg_tekstura);
+        std::fstream input_file("./character_data.txt", std::ios::in);
+        if (input_file.is_open()) {
+            input_file >> high_score;
+            while (!input_file.eof()) {
+                std::string line;
+                input_file >> line;
+
+                if(line[0]=='1')
+                {
+                achievements.emplace_back(1);
+                }
+                else {achievements.emplace_back(0);}
+                input_file >>line;
+            }
+        }
+        tekstura.loadFromFile("./postacprzyklad.png");
         setTexture(tekstura);
         setScale(0.3, 0.3);
         setTextureRect(sf::IntRect(0, 0, 150, 190));
@@ -72,16 +88,22 @@ public:
             setTextureRect(sf::IntRect(0, 200, 150, 190));
         }
     }
-void add_points(int points_to_add)
+void add_points(int points_to_add)  //dodawanie punktow, edycja najwyzszego wyniku
     {
     points += points_to_add;
+        if(points>high_score)
+        {
+            high_score=points;
+        }
+        std::cout<<points<<"/"<<high_score<<std::endl;
     }
 private:
     sf::Vector3f velocity;
     sf::RenderWindow& window;
     sf::Texture tekstura;
-    int points;     //to na później
+    int points;     //obecne punkty w czasie rozgrywki
     int high_score;
+    std::vector<bool> achievements;
     friend class Cmap;
 };
 
@@ -97,7 +119,7 @@ public:
         my_character = new Character(sf::Vector3f(3000, 3000, 0), window, tex_character);
     }
 
-std::vector<Object*> to_draw()
+std::vector<Mushroom*> to_draw()
     {
     return graphicobjects;
     }
@@ -112,8 +134,9 @@ Character* player()
         for (auto &s : graphicobjects)
         {
             sf::FloatRect boundingBox = my_character->getGlobalBounds();
-            if(boundingBox.contains(s->getPosition()))
+            if(boundingBox.contains(s->getPosition().x+(s->getGlobalBounds().width/2),s->getPosition().y+(s->getGlobalBounds().height)/2))
             {
+                my_character->add_points(s->Get_points());
                 graphicobjects.erase(std::remove(graphicobjects.begin(), graphicobjects.end(), s), graphicobjects.end());;
             }
         }
@@ -123,7 +146,7 @@ private:
     sf::RenderWindow& window;
     Character* my_character;
     Mushroom my_mushroom;
-    std::vector<Object*> graphicobjects;
+    std::vector<Mushroom*> graphicobjects;
 };
 
 int main() {

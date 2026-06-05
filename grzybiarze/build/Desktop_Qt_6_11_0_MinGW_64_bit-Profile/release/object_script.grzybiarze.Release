@@ -1,0 +1,10 @@
+release/booster.o
+release/bush.o
+release/button.o
+release/character.o
+release/cmap.o
+release/main.o
+release/menu.o
+release/mushroom.o
+release/object.o
+release/przeszkoda.o

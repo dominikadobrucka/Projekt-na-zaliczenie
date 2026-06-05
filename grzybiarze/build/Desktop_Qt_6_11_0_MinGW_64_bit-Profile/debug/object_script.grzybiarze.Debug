@@ -1,0 +1,10 @@
+debug/booster.o
+debug/bush.o
+debug/button.o
+debug/character.o
+debug/cmap.o
+debug/main.o
+debug/menu.o
+debug/mushroom.o
+debug/object.o
+debug/przeszkoda.o

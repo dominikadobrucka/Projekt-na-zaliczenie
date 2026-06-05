@@ -6,9 +6,11 @@ CONFIG -= qt
 SOURCES += \
         booster.cpp \
         bush.cpp \
+        button.cpp \
         character.cpp \
         cmap.cpp \
         main.cpp \
+        menu.cpp \
         mushroom.cpp \
         object.cpp \
         przeszkoda.cpp
@@ -23,8 +25,10 @@ CONFIG(debug, debug|release){
 HEADERS += \
     booster.h \
     bush.h \
+    button.h \
     character.h \
     cmap.h \
+    menu.h \
     mushroom.h \
     object.h \
     przeszkoda.h

@@ -9,11 +9,10 @@ public:
     Mushroom(sf::RenderWindow& window) :
         points_for(10),window(window)
     {
-        sf::FloatRect rectangle_bounds = getGlobalBounds();
-        tekstura.loadFromFile("./gzib.png");
+        tekstura.loadFromFile("./kania.png");
         setTexture(tekstura);
-        setPosition(rand()%window.getSize().x-rectangle_bounds.width, rand()%window.getSize().y-rectangle_bounds.height);
-        setScale(0.05, 0.05);
+        setPosition(rand()%window.getSize().x-50, rand()%window.getSize().y-50);
+        setScale(0.03, 0.03);
     }
     ~Mushroom(){};
     int Get_points();

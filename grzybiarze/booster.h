@@ -10,10 +10,10 @@ public:
     Booster(sf::RenderWindow& window) :
         window(window)
     {
-        sf::FloatRect rectangle_bounds = getGlobalBounds();
+        //sf::FloatRect rectangle_bounds = getGlobalBounds();
         tekstura.loadFromFile("./booster.png");
         setTexture(tekstura);
-        setPosition(rand()%window.getSize().x-rectangle_bounds.width, rand()%window.getSize().y-rectangle_bounds.height);
+        setPosition((rand()%window.getSize().x)-100, (rand()%window.getSize().y)-100);
         setScale(0.02, 0.02);
     }
     ~Booster(){};

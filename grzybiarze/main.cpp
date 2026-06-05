@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <SFML/Window/Mouse.hpp>
+
 //#include <memory>
 
 #include <object.h>
@@ -12,11 +14,13 @@
 #include <booster.h>
 #include <character.h>
 #include <cmap.h>
+#include <menu.h>
 
 
 
 int main() {
     // create the window
+    std::srand(std::time({}));
     sf::RenderWindow window(sf::VideoMode(1000, 800), "My window");
 
 
@@ -28,11 +32,10 @@ int main() {
     grass.setRepeated(true);
 
 
-    sf::Sprite bg;
-    bg.setTexture(grass);
-    bg.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
     sf::Event event;
+    Menu menu(window,event);
     CMap plansza1(window,event,tex1);
+    int choice = 1;
 
     sf::Clock clock;
 
@@ -42,11 +45,38 @@ int main() {
 
         sf::Time elapsed = clock.restart();
 
-        //window.draw(bg);
+       // while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+       // {
+       //     menu.draw_everything();
+       // }
 
-        plansza1.check_updates(elapsed);
-        plansza1.pick_mushrooms();
-        plansza1.draw_everything();
+        switch(choice)
+        {
+        case 1:
+        {
+            while (window.pollEvent(event)) {
+
+                if(event.type == sf::Event::MouseButtonPressed)
+                {
+                    choice = 2;
+                }
+            }
+            menu.check_updates();
+            menu.draw_everything();
+            std::cout<<"abc"<<std::endl;
+            break;
+        }
+        case 2:
+        {
+            plansza1.check_updates(elapsed);
+            plansza1.check_collisions();
+            plansza1.draw_everything();
+            break;
+        }
+        }
+
+
+
 
 
         window.display();

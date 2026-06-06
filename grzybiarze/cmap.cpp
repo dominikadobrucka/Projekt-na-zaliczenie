@@ -1,6 +1,6 @@
 #include "cmap.h"
 
-void CMap::check_updates(sf::Time elapsed)
+void CMap::check_updates(sf::Time elapsed, double game_timer)
 {
     while (window.pollEvent(event)) {
         // "close requested" event: we close the window
@@ -16,6 +16,7 @@ void CMap::check_updates(sf::Time elapsed)
             my_character->animate(elapsed,'d');
         }
     }
+
 }
 
 void CMap::check_collisions()

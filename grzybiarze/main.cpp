@@ -15,8 +15,7 @@
 #include <character.h>
 #include <cmap.h>
 #include <menu.h>
-
-
+#include <achievments_page.h>
 
 int main() {
     // create the window
@@ -24,18 +23,13 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1000, 800), "My window");
 
 
-    std::string tex1="./gzib.png";
-    std::string tex2="./postacprzyklad.png";
-
-    sf::Texture grass;
-    grass.loadFromFile("./grass.png");
-    grass.setRepeated(true);
-
-
     sf::Event event;
     Menu menu(window,event);
-    CMap plansza1(window,event,tex1);
+    CMap plansza1(window,event);
+    achievments_page osiagniecia(window,event);
+
     int choice = 1;
+    double game_timer = 0;
 
     sf::Clock clock;
 
@@ -45,32 +39,39 @@ int main() {
 
         sf::Time elapsed = clock.restart();
 
-       // while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-       // {
-       //     menu.draw_everything();
-       // }
 
         switch(choice)
         {
         case 1:
         {
+            game_timer=0;
             while (window.pollEvent(event)) {
-
+                if (event.type == sf::Event::Closed)
+                    window.close();
                 if(event.type == sf::Event::MouseButtonPressed)
                 {
                     choice = 2;
                 }
             }
-            menu.check_updates();
+            //menu.check_updates();
             menu.draw_everything();
             break;
         }
         case 2:
         {
-            plansza1.check_updates(elapsed);
+            if(game_timer<=60)
+            {
+            game_timer += elapsed.asSeconds();
+            plansza1.check_updates(elapsed,game_timer);
             plansza1.check_collisions();
             plansza1.draw_everything();
             break;
+            }
+            else{choice=1;}
+        }
+        case 3:
+        {
+
         }
         }
         window.display();

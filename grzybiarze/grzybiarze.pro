@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        achievments_page.cpp \
         booster.cpp \
         bush.cpp \
         button.cpp \
@@ -23,6 +24,7 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
+    achievments_page.h \
     booster.h \
     bush.h \
     button.h \

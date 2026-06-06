@@ -4,7 +4,7 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Texture.hpp"
 #include "object.h"
-#include <iostream>
+
 class Przeszkoda : public Object
 {
     public:
@@ -19,13 +19,7 @@ class Przeszkoda : public Object
 
 }
 
-sf::FloatRect get_korzenie() //zwraca pozycje korzeni drzewa
-{
-     sf::FloatRect rb = getGlobalBounds();
-    return sf::FloatRect(sf::Vector2f(rb.left+rb.width*0.4,rb.top+0.8*rb.height),sf::Vector2f(0.2*rb.width,0.2*rb.height));
-}
-
-sf::FloatRect getGlobalBounds(){
+sf::FloatRect getGlobalBounds(){  //nadpisuje getGlobalBounds zeby zwracala obszar korzeni
     sf::FloatRect rb = Object::getGlobalBounds();
     return sf::FloatRect(sf::Vector2f(rb.left+rb.width*0.4,rb.top+0.8*rb.height),sf::Vector2f(0.2*rb.width,0.2*rb.height));
 };
@@ -33,7 +27,6 @@ sf::FloatRect getGlobalBounds(){
 private:
 sf::Texture tekstura;
 sf::RenderWindow& window;
-sf::FloatRect korzenie(sf::Vector2f a,sf::Vector2f b);
 friend class CMap;
 };
 

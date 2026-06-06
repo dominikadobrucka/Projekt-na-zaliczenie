@@ -2,6 +2,7 @@
 #define CMAP_H
 
 #include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/Graphics/Text.hpp"
 #include "SFML/Window/Event.hpp"
 #include "booster.h"
 #include "bush.h"
@@ -9,10 +10,11 @@
 #include "mushroom.h"
 #include "przeszkoda.h"
 #include <algorithm>
+
 class CMap
 {
 public:
-    CMap(sf::RenderWindow& window, sf::Event ev,std::string tex) :
+    CMap(sf::RenderWindow& window, sf::Event ev) :
         window(window), event(ev)
     {
         std::vector<Object*> everything;
@@ -20,7 +22,7 @@ public:
         my_character = new Character(sf::Vector2f(3000, 3000), window);
         everything.emplace_back(my_character);
 
-        for(int i=0; i<4; i++)//tworzymy grzyby, sprawdzamy czy nie nachodza na inne obiekty
+        for(int i=0; i<5+rand()%10; i++)//tworzymy grzyby, sprawdzamy czy nie nachodza na inne obiekty
         {
             Mushroom* nowy = new Mushroom(window);
             if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
@@ -30,7 +32,7 @@ public:
             }
         }
 
-        for(int i=0; i<2; i++)
+        for(int i=0; i<rand()%2; i++)
         {
             Booster* nowy = new Booster(window);
             if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
@@ -50,7 +52,7 @@ public:
             }
         }
 
-        for(int i=0; i<10; i++)
+        for(int i=0; i<20; i++)
         {
             Przeszkoda* nowy = new Przeszkoda(window);
             if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
@@ -64,9 +66,12 @@ public:
         bg_tex.setRepeated(true);
         background.setTexture(bg_tex);
         background.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+        sf::Font font;
+        font.loadFromFile("./PixelGame-R9AZe.otf");
+        my_timer = new sf::Text("abc",font,30);
     }
 
-    void check_updates(sf::Time elapsed);
+    void check_updates(sf::Time elapsed,double game_timer);
     void check_collisions();
     void draw_everything();
     void save_data()
@@ -84,6 +89,7 @@ private:
     std::vector<Przeszkoda*> vec_przeszkody;
     std::vector<Bush*> vec_bushes;
     sf::Event event;
+    sf::Text* my_timer;
 };
 
 #endif // CMAP_H

@@ -9,7 +9,7 @@
 class Character : public Object {
 public:
     Character(const sf::Vector2f& velocity, sf::RenderWindow& window) :
-        velocity(velocity), window(window), points(0), high_score(0),booster_counter(1)
+        velocity(velocity), window(window), points(0), high_score(0),booster_counter(1),animation_timer(0)
     {
         std::fstream input_file("./character_data.txt", std::ios::in);
         if (input_file.is_open()) {
@@ -22,7 +22,7 @@ public:
                 {
                     achievements.emplace_back(true);
                 }
-                else {achievements.emplace_back(false);}
+                else if(line[0]=='0'){achievements.emplace_back(false);}
             }
         }
         tekstura.loadFromFile("./postacprzyklad.png");
@@ -55,9 +55,9 @@ public:
             {
                 if(s==true)
                 {
-                    input_file<<std::endl<<1;
+                    input_file<<std::endl<<'1';
                 }
-                else if(s==false){input_file<<std::endl<<0;}
+                else if(s==false){input_file<<std::endl<<'0';}
             }
         }
     }
@@ -71,7 +71,7 @@ private:
     int booster_counter;
     std::vector<bool> achievements;
     friend class Cmap;
-
+    double animation_timer;
 };
 
 #endif // CHARACTER_H

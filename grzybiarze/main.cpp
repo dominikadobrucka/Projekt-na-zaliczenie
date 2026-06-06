@@ -63,7 +63,6 @@ int main() {
             }
             menu.check_updates();
             menu.draw_everything();
-            std::cout<<"abc"<<std::endl;
             break;
         }
         case 2:
@@ -74,13 +73,8 @@ int main() {
             break;
         }
         }
-
-
-
-
-
         window.display();
     }
-
+    plansza1.save_data();
     return 0;
 }

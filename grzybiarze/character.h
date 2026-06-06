@@ -9,8 +9,7 @@
 class Character : public Object {
 public:
     Character(const sf::Vector2f& velocity, sf::RenderWindow& window) :
-        velocity(velocity), window(window), points(0), high_score(0),booster_counter(1),
-        is_in_collision_right(false), is_in_collision_left(false), is_in_collision_top(false), is_in_collision_bottom(false)
+        velocity(velocity), window(window), points(0), high_score(0),booster_counter(1)
     {
         std::fstream input_file("./character_data.txt", std::ios::in);
         if (input_file.is_open()) {
@@ -21,10 +20,9 @@ public:
 
                 if(line[0]=='1')
                 {
-                    achievements.emplace_back(1);
+                    achievements.emplace_back(true);
                 }
-                else {achievements.emplace_back(0);}
-                input_file >>line;
+                else {achievements.emplace_back(false);}
             }
         }
         tekstura.loadFromFile("./postacprzyklad.png");
@@ -48,24 +46,21 @@ public:
         velocity.y = v*booster_counter;
     }
 
-    void collision_right(bool state)
+    void save_data()
     {
-     is_in_collision_right = state;
+        std::ofstream input_file("./character_data.txt", std::ios::out);
+        if (input_file.is_open()) {
+            input_file << high_score;
+            for(auto s: achievements)
+            {
+                if(s==true)
+                {
+                    input_file<<std::endl<<1;
+                }
+                else if(s==false){input_file<<std::endl<<0;}
+            }
+        }
     }
-    void collision_left(bool state)
-    {
-        is_in_collision_left = state;
-    }
-    void collision_top(bool state)
-    {
-        is_in_collision_top = state;
-    }
-    void collision_bottom(bool state)
-    {
-        is_in_collision_bottom = state;
-    }
-
-
 
 private:
     sf::Vector2f velocity;
@@ -76,10 +71,7 @@ private:
     int booster_counter;
     std::vector<bool> achievements;
     friend class Cmap;
-    bool is_in_collision_right;
-    bool is_in_collision_left;
-    bool is_in_collision_top;
-    bool is_in_collision_bottom;
+
 };
 
 #endif // CHARACTER_H

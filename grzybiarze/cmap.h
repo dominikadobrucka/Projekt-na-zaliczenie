@@ -69,6 +69,10 @@ public:
     void check_updates(sf::Time elapsed);
     void check_collisions();
     void draw_everything();
+    void save_data()
+    {
+        my_character->save_data();
+    }
 
 private:
     sf::RenderWindow& window;

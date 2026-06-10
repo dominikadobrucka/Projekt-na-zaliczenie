@@ -7,15 +7,7 @@
 class Bush: public Object
 {
 public:
-    Bush(sf::RenderWindow& window) :
-        window(window)
-    {
-        sf::FloatRect rectangle_bounds = getGlobalBounds();
-        tekstura.loadFromFile("./maliny.png");
-        setTexture(tekstura);
-        setPosition(rand()%window.getSize().x-rectangle_bounds.width, rand()%window.getSize().y-rectangle_bounds.height);
-        setScale(0.05, 0.05);
-    }
+    Bush(sf::RenderWindow& window);
 private:
     sf::Texture tekstura;
     sf::RenderWindow& window;

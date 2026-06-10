@@ -14,70 +14,12 @@
 class CMap
 {
 public:
-    CMap(sf::RenderWindow& window, sf::Event ev) :
-        window(window), event(ev)
-    {
-        std::vector<Object*> everything;
-
-        my_character = new Character(sf::Vector2f(3000, 3000), window);
-        everything.emplace_back(my_character);
-
-        for(int i=0; i<5+rand()%10; i++)//tworzymy grzyby, sprawdzamy czy nie nachodza na inne obiekty
-        {
-            Mushroom* nowy = new Mushroom(window);
-            if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
-            {
-                vec_mushrooms.emplace_back(nowy);
-                everything.emplace_back(nowy);
-            }
-        }
-
-        for(int i=0; i<rand()%2; i++)
-        {
-            Booster* nowy = new Booster(window);
-            if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
-            {
-                vec_boosters.emplace_back(nowy);
-                everything.emplace_back(nowy);
-            }
-        }
-
-        for(int i=0; i<5; i++)
-        {
-            Bush* nowy = new Bush(window);
-            if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
-            {
-                vec_bushes.emplace_back(nowy);
-                everything.emplace_back(nowy);
-            }
-        }
-
-        for(int i=0; i<20; i++)
-        {
-            Przeszkoda* nowy = new Przeszkoda(window);
-            if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
-            {
-                vec_przeszkody.emplace_back(nowy);
-                everything.emplace_back(nowy);
-            }
-        }
-
-        bg_tex.loadFromFile("./grass.png");
-        bg_tex.setRepeated(true);
-        background.setTexture(bg_tex);
-        background.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
-        sf::Font font;
-        font.loadFromFile("./PixelGame-R9AZe.otf");
-        my_timer = new sf::Text("abc",font,30);
-    }
-
+    CMap(sf::RenderWindow& window, sf::Event ev);
     void check_updates(sf::Time elapsed,double game_timer);
     void check_collisions();
     void draw_everything();
-    void save_data()
-    {
-        my_character->save_data();
-    }
+    void save_data();
+    void reset();
 
 private:
     sf::RenderWindow& window;

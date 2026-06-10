@@ -1,5 +1,67 @@
 #include "cmap.h"
 
+CMap::CMap(sf::RenderWindow& window, sf::Event ev) :
+    window(window), event(ev)
+{
+    std::vector<Object*> everything;
+
+    my_character = new Character(sf::Vector2f(1500, 1500), window);
+    everything.emplace_back(my_character);
+
+    for(int i=0; i<12+rand()%10; i++)//tworzymy grzyby, sprawdzamy czy nie nachodza na inne obiekty
+    {
+        Mushroom* nowy = new Mushroom(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_mushrooms.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+        else{delete nowy;}
+    }
+
+    for(int i=0; i<rand()%2; i++)
+    {
+        Booster* nowy = new Booster(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_boosters.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+        else{delete nowy;}
+    }
+
+    for(int i=0; i<15+rand()%10; i++)
+    {
+        Bush* nowy = new Bush(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_bushes.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+        else{delete nowy;}
+    }
+
+    for(int i=0; i<30; i++)
+    {
+        Przeszkoda* nowy = new Przeszkoda(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_przeszkody.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+    }
+
+    bg_tex.loadFromFile("./grass.png");
+    bg_tex.setRepeated(true);
+    background.setTexture(bg_tex);
+    background.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+    /*
+        sf::Font font;
+        font.loadFromFile("./PixelGame-R9AZe.otf");
+        my_timer = new sf::Text("abc",font,30);
+*/
+}
+
 void CMap::check_updates(sf::Time elapsed, double game_timer)
 {
     while (window.pollEvent(event)) {
@@ -38,13 +100,13 @@ void CMap::check_collisions()
             vec_boosters.erase(std::remove(vec_boosters.begin(), vec_boosters.end(), s), vec_boosters.end());;
         }
     }
-    for (auto &s : vec_bushes) //sprawdzamy czy podniesiono booster
+    for (auto &s : vec_bushes) //sprawdzamy czy przechodzimy przez krzak
     {
         if(boundingBox.intersects(s->getGlobalBounds()))
         {
-            my_character->set_speed(1000);
+            my_character->set_speed(900);
         }
-        else{my_character->set_speed(2000);}
+        else{my_character->set_speed(1500);}
     }
 
     for (auto &s : vec_przeszkody) //sprawdzamy czy przechodzimy przez drzewa
@@ -112,6 +174,66 @@ void CMap::draw_everything() //rysowanie wszystkich elementow
     for (auto &s : vec_przeszkody)
     {
         window.draw(*s);
+    }
+}
+
+void CMap::save_data()
+{
+    my_character->save_data();
+}
+
+void CMap::reset()
+{
+    vec_mushrooms.clear();
+    vec_boosters.clear();
+    vec_bushes.clear();
+    vec_przeszkody.clear();
+
+    my_character->reset();
+
+    std::vector<Object*> everything;
+
+    for(int i=0; i<12+rand()%10; i++)//tworzymy grzyby, sprawdzamy czy nie nachodza na inne obiekty
+    {
+        Mushroom* nowy = new Mushroom(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_mushrooms.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+        else{delete nowy;}
+    }
+
+    for(int i=0; i<rand()%2; i++)
+    {
+        Booster* nowy = new Booster(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_boosters.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+        else{delete nowy;}
+    }
+
+    for(int i=0; i<15+rand()%10; i++)
+    {
+        Bush* nowy = new Bush(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_bushes.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
+        else{delete nowy;}
+    }
+
+    for(int i=0; i<30; i++)
+    {
+        Przeszkoda* nowy = new Przeszkoda(window);
+        if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))
+        {
+            vec_przeszkody.emplace_back(nowy);
+            everything.emplace_back(nowy);
+        }
     }
 }
 

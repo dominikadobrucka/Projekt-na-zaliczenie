@@ -20,7 +20,7 @@
 int main() {
     // create the window
     std::srand(std::time({}));
-    sf::RenderWindow window(sf::VideoMode(1000, 800), "My window");
+    sf::RenderWindow window(sf::VideoMode(1400, 1000), "My window");
 
 
     sf::Event event;
@@ -59,7 +59,7 @@ int main() {
         }
         case 2:
         {
-            if(game_timer<=60)
+            if(game_timer<=45)
             {
             game_timer += elapsed.asSeconds();
             plansza1.check_updates(elapsed,game_timer);
@@ -68,6 +68,7 @@ int main() {
             break;
             }
             else{choice=1;}
+            plansza1.reset();
         }
         case 3:
         {

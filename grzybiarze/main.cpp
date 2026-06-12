@@ -25,10 +25,9 @@ int main() {
     GameAudio gameAudio;
     gameAudio.playMusic();
 
-    
     sf::Event event;
     Menu menu(window,event);
-    CMap plansza1(window,event);
+    Cmap plansza1(window,event);
     achievments_page osiagniecia(window,event);
 
     int choice = 1;
@@ -36,18 +35,15 @@ int main() {
 
     sf::Clock clock;
 
-
     while (window.isOpen()) {
       
-
         sf::Time elapsed = clock.restart();
-
 
         switch(choice)
         {
         case 1:
         {
-            game_timer=0;
+            game_timer = 0;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window.close();
@@ -56,29 +52,29 @@ int main() {
                     choice = 2;
                 }
             }
-            //menu.check_updates();
             menu.draw_everything();
             break;
         }
         case 2:
         {
-            if(game_timer<=45)
+            game_timer += elapsed.asSeconds();
+            
+            
+            if (plansza1.check_updates(elapsed, game_timer) == true)
             {
-                game_timer += elapsed.asSeconds();
-                plansza1.check_updates(elapsed,game_timer);
-                
-                // POPRAWIONE: Przekazujemy gameAudio do funkcji sprawdzającej kolizje
-                plansza1.check_collisions(gameAudio);
-                
-                plansza1.draw_everything();
-                break;
+                game_timer = 0; 
+                choice = 1;     
+                break;          
             }
-            else{choice=1;}
-            plansza1.reset();
+            
+            plansza1.check_collisions(gameAudio);
+            plansza1.draw_everything();
+            
+            break;
         }
         case 3:
         {
-
+            break;
         }
         }
         window.display();

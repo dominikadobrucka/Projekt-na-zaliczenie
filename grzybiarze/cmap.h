@@ -10,13 +10,14 @@
 #include "mushroom.h"
 #include "przeszkoda.h"
 #include <algorithm>
+#include "audio.h"
 
 class CMap
 {
 public:
     CMap(sf::RenderWindow& window, sf::Event ev);
     void check_updates(sf::Time elapsed,double game_timer);
-    void check_collisions();
+    void check_collisions(GameAudio& audio);
     void draw_everything();
     void save_data();
     void reset();
@@ -34,4 +35,4 @@ private:
     sf::Text* my_timer;
 };
 
-#endif // CMAP_H
+#endif 

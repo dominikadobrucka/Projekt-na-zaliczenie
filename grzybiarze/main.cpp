@@ -16,13 +16,16 @@
 #include <cmap.h>
 #include <menu.h>
 #include <achievments_page.h>
+#include "audio.h"
 
 int main() {
-    // create the window
+
     std::srand(std::time({}));
     sf::RenderWindow window(sf::VideoMode(1400, 1000), "My window");
+    GameAudio gameAudio;
+    gameAudio.playMusic();
 
-
+    
     sf::Event event;
     Menu menu(window,event);
     CMap plansza1(window,event);
@@ -33,9 +36,9 @@ int main() {
 
     sf::Clock clock;
 
-    // run the program as long as the window is open
+
     while (window.isOpen()) {
-        // check all the window's events that were triggered since the last iteration of the loop
+      
 
         sf::Time elapsed = clock.restart();
 
@@ -61,11 +64,14 @@ int main() {
         {
             if(game_timer<=45)
             {
-            game_timer += elapsed.asSeconds();
-            plansza1.check_updates(elapsed,game_timer);
-            plansza1.check_collisions();
-            plansza1.draw_everything();
-            break;
+                game_timer += elapsed.asSeconds();
+                plansza1.check_updates(elapsed,game_timer);
+                
+                // POPRAWIONE: Przekazujemy gameAudio do funkcji sprawdzającej kolizje
+                plansza1.check_collisions(gameAudio);
+                
+                plansza1.draw_everything();
+                break;
             }
             else{choice=1;}
             plansza1.reset();

@@ -65,7 +65,7 @@ CMap::CMap(sf::RenderWindow& window, sf::Event ev) :
 void CMap::check_updates(sf::Time elapsed, double game_timer)
 {
     while (window.pollEvent(event)) {
-        // "close requested" event: we close the window
+        
         if (event.type == sf::Event::Closed)
             window.close();
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)||sf::Keyboard::isKeyPressed(sf::Keyboard::W)) //chodzenie WSAD lub strzałki
@@ -81,18 +81,19 @@ void CMap::check_updates(sf::Time elapsed, double game_timer)
 
 }
 
-void CMap::check_collisions()
+void CMap::check_collisions(GameAudio& audio) 
 {
     sf::FloatRect boundingBox = my_character->getGlobalBounds();
-    for (auto &s : vec_mushrooms) //sprawdzamy czy postac dotyka grzybka, jesli tak to go usuwamy z wektora
+    for (auto &s : vec_mushrooms) 
     {
         if(boundingBox.contains(s->getPosition().x+(s->getGlobalBounds().width/2),s->getPosition().y+(s->getGlobalBounds().height)/2))
         {
             my_character->add_points(s->Get_points());
+            audio.playCollect();
             vec_mushrooms.erase(std::remove(vec_mushrooms.begin(), vec_mushrooms.end(), s), vec_mushrooms.end());;
         }
     }
-    for (auto &s : vec_boosters) //sprawdzamy czy podniesiono booster
+    for (auto &s : vec_boosters) 
     {
         if(boundingBox.contains(s->getPosition().x+(s->getGlobalBounds().width/2),s->getPosition().y+(s->getGlobalBounds().height)/2))
         {
@@ -100,7 +101,7 @@ void CMap::check_collisions()
             vec_boosters.erase(std::remove(vec_boosters.begin(), vec_boosters.end(), s), vec_boosters.end());;
         }
     }
-    for (auto &s : vec_bushes) //sprawdzamy czy przechodzimy przez krzak
+    for (auto &s : vec_bushes) 
     {
         if(boundingBox.intersects(s->getGlobalBounds()))
         {
@@ -109,7 +110,7 @@ void CMap::check_collisions()
         else{my_character->set_speed(1500);}
     }
 
-    for (auto &s : vec_przeszkody) //sprawdzamy czy przechodzimy przez drzewa
+    for (auto &s : vec_przeszkody) 
     {
 
         sf::FloatRect a = s->getGlobalBounds();
@@ -154,7 +155,7 @@ void CMap::check_collisions()
     }
 }
 
-void CMap::draw_everything() //rysowanie wszystkich elementow
+void CMap::draw_everything() 
 {
     window.clear(sf::Color::Black);
     window.draw(background);
@@ -193,7 +194,7 @@ void CMap::reset()
 
     std::vector<Object*> everything;
 
-    for(int i=0; i<12+rand()%10; i++)//tworzymy grzyby, sprawdzamy czy nie nachodza na inne obiekty
+    for(int i=0; i<12+rand()%10; i++)
     {
         Mushroom* nowy = new Mushroom(window);
         if(none_of(everything.begin(),everything.end(),[nowy](Object* a){return nowy->getGlobalBounds().intersects(a->getGlobalBounds());}))

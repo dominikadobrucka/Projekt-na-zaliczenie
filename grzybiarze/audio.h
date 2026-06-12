@@ -10,6 +10,11 @@ private:
     sf::SoundBuffer collectBuffer;
     sf::Sound collectSound;
 
+    sf::SoundBuffer winBuffer;
+    sf::Sound winSound;
+    sf::SoundBuffer loseBuffer;
+    sf::Sound loseSound;
+
 public:
     GameAudio() {
         if (!backgroundMusic.openFromFile("soundtrack_dzwiek.mp3")) {
@@ -25,6 +30,20 @@ public:
             collectSound.setBuffer(collectBuffer);
             collectSound.setVolume(60);     
         }
+
+        if (!winBuffer.loadFromFile("wygrana.mp3")) {
+            std::cout << "Blad ladowania dzwieku wygrana.mp3! Upewnij sie, ze plik jest w folderze build." << std::endl;
+        } else {
+            winSound.setBuffer(winBuffer);
+            winSound.setVolume(100);     
+        }
+
+        if (!loseBuffer.loadFromFile("przegrana.mp3")) {
+            std::cout << "Blad ladowania dzwieku przegrana.mp3! Upewnij sie, ze plik jest w folderze build." << std::endl;
+        } else {
+            loseSound.setBuffer(loseBuffer);
+            loseSound.setVolume(100);     
+        }
     }
 
     void playMusic() {
@@ -36,6 +55,14 @@ public:
     void playCollect() {
         collectSound.play();
     }
+
+    void playWin() {
+        winSound.play();
+    }
+
+    void playLose() {
+        loseSound.play();
+    }
 };
 
-#endif 
+#endif

@@ -60,7 +60,7 @@ int main() {
             game_timer += elapsed.asSeconds();
             
             
-            if (plansza1.check_updates(elapsed, game_timer) == true)
+            if (plansza1.check_updates(elapsed, game_timer, gameAudio) == true)
             {
                 game_timer = 0; 
                 choice = 1;     

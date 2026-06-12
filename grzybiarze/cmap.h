@@ -14,7 +14,7 @@ class Cmap {
 public:
     Cmap(sf::RenderWindow& window, sf::Event& event);
     void draw_everything();
-    bool check_updates(sf::Time elapsed, double game_timer);
+    bool check_updates(sf::Time elapsed, double game_timer, GameAudio& audio);
     void check_collisions(GameAudio& audio);
     void reset();
     void save_data();
@@ -42,6 +42,13 @@ private:
     sf::Text game_over_text; 
     bool game_over = false;  
     int jadalne_na_mapie = 0;
+    sf::Texture timer_tex;
+    sf::Sprite timer_sprite;
+    sf::Texture points_tex;
+    sf::Sprite points_sprite;
+    int punkty_gracza = 0;
+
+    sf::RectangleShape haze_overlay;
 };
 
 #endif // CMAP_H

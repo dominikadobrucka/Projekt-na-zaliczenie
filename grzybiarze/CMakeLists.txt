@@ -4,7 +4,6 @@ project(GraSFML CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Pobieranie SFML
 include(FetchContent)
 FetchContent_Declare(
     SFML
@@ -13,7 +12,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
-file(GLOB SOURCES *.cpp *.h)
+file(GLOB SOURCES *.cpp)
 
 add_executable(MojaGra ${SOURCES})
 
@@ -27,9 +26,6 @@ if(WIN32)
         "${sfml_BINARY_DIR}/lib"
         "$<TARGET_FILE_DIR:MojaGra>"
     )
-    
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/grafiki DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/dzwieki DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/grafiki DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/dzwieki DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

@@ -29,6 +29,9 @@ private:
     sf::Text przycisk_osiagniecia;
     sf::Texture achi_btn_tex;
     sf::Sprite achi_btn_sprite;
+
+    
+    Button* button_zasady;
 };
 
 #endif // MENU_H

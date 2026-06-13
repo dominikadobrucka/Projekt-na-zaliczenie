@@ -11,19 +11,34 @@ Menu::Menu(sf::RenderWindow& window, sf::Event ev): window(window), event(ev){
     button_osiagniecia = new Button(window);
     button_osiagniecia->zmienGrafike("./achprzycisk.png"); 
 
+    button_zasady = new Button(window);
+    button_zasady->zmienGrafike("./zasadyprzycisk.png");
+
     float startScaleX = button->getScale().x;
     float startScaleY = button->getScale().y;
 
+    
     button_osiagniecia->setScale(startScaleX * 1.48f, startScaleY * 1.55f);
-    button_osiagniecia->setPosition(button->getPosition().x - 30.f, window.getSize().y * 0.81f);
+    button_zasady->setScale(startScaleX * 1.48f, startScaleY * 1.55f);
+
+    
+    button_osiagniecia->setPosition(button->getPosition().x - 0.f, window.getSize().y * 0.81f);
+    button_zasady->setPosition(button->getPosition().x + 480.f, window.getSize().y * 0.75f);
 }
 
 void Menu::draw_everything()
 {
-    window.clear(sf::Color::Black);
+    window.clear();
     window.draw(bg);
-    window.draw(*button);             
-    window.draw(*button_osiagniecia); 
+    
+    
+    window.draw(*button);
+    window.draw(*button_osiagniecia);
+
+    
+    window.draw(*button_zasady);
+
+    
 }
 
 void Menu::check_updates()
@@ -36,23 +51,21 @@ void Menu::check_updates()
 
 int Menu::check_click(sf::Vector2i mouse_pos)
 {
-    sf::Vector2f mouse_f(mouse_pos.x, mouse_pos.y);
+    sf::Vector2f mouse_f;
+    mouse_f.x = static_cast<float>(mouse_pos.x) * (window.getDefaultView().getSize().x / window.getSize().x);
+    mouse_f.y = static_cast<float>(mouse_pos.y) * (window.getDefaultView().getSize().y / window.getSize().y);
 
-    
     if(button->getGlobalBounds().contains(mouse_f)) {
         return 2;
     }
     
-    
-    sf::FloatRect achi_hitbox = button_osiagniecia->getGlobalBounds();
-    
-    
-    achi_hitbox.left -= 50.f;
-    achi_hitbox.width += 100.f;
-
-    if(achi_hitbox.contains(mouse_f)) {
+    if(button_osiagniecia->getGlobalBounds().contains(mouse_f)) {
         return 3;
     }
 
-    return 0; 
+    if(button_zasady->getGlobalBounds().contains(mouse_f)) {
+        return 4;
+    }
+
+    return 0;
 }

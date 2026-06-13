@@ -20,12 +20,15 @@ private:
     sf::RenderWindow& window;
     sf::Event event;
     Button* button;
+    Button* button_osiagniecia;
     sf::Sprite bg;
     sf::Texture bg_tex;
 
-    // Zmienne do nowego przycisku
+    
     sf::Font font_menu;
     sf::Text przycisk_osiagniecia;
+    sf::Texture achi_btn_tex;
+    sf::Sprite achi_btn_sprite;
 };
 
 #endif // MENU_H

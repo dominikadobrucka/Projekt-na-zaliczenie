@@ -9,6 +9,10 @@ class Button : public sf::Sprite
 {
 public:
     Button(sf::RenderWindow& window);
+    void zmienGrafike(std::string sciezka) {
+    button_tex.loadFromFile(sciezka);
+    setTexture(button_tex);
+}
 
 private:
     sf::Texture button_tex;

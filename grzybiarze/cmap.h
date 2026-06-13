@@ -21,7 +21,7 @@ public:
     int podajPunkty() {
         return punkty_gracza;
     }
-    // --- ZMIENNE DO OSIĄGNIĘĆ ---
+   
     bool achi_perfekcjonista = false;
     bool achi_halucynek = false;
     bool achi_sprinter = false;

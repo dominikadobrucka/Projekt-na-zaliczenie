@@ -72,6 +72,7 @@ Cmap::Cmap(sf::RenderWindow& window, sf::Event& event) :
         else{delete nowy;}
     }
 
+    
     if (bg_tex.loadFromFile("tlo.png")) 
     {
         background.setTexture(bg_tex);
@@ -205,19 +206,25 @@ void Cmap::check_collisions(GameAudio& audio)
         if(boundingBox.contains(s->getPosition().x+(s->getGlobalBounds().width/2),s->getPosition().y+(s->getGlobalBounds().height)/2))
         {
             punkty_gracza += s->Get_points();
-            audio.playCollect();
+            
+            
+            if (s->Get_type() == "halucynek" || s->Get_type() == "halucynka")
+            {
+                my_character->set_speed(500);
+                slow_timer = 5.0;
+                achi_halucynek = true;
+                audio.playHalucynek(); 
+            }
+            else
+            {
+                audio.playCollect();   
+            }
+
             if (s->Get_points() > 0) {
                 jadalne_na_mapie--;
                 zjedzone_dobre++;
             } else {
                 zjedzone_zle++;
-            }
-
-            if (s->Get_type() == "halucynek")
-            {
-                my_character->set_speed(500);
-                slow_timer = 5.0;
-                achi_halucynek = true;
             }
 
             vec_mushrooms.erase(std::remove(vec_mushrooms.begin(), vec_mushrooms.end(), s), vec_mushrooms.end());
@@ -230,7 +237,7 @@ void Cmap::check_collisions(GameAudio& audio)
         if(boundingBox.contains(s->getPosition().x+(s->getGlobalBounds().width/2),s->getPosition().y+(s->getGlobalBounds().height)/2))
         {
             my_character->add_booster();
-            audio.playCollect();
+            audio.playBooster(); 
             vec_boosters.erase(std::remove(vec_boosters.begin(), vec_boosters.end(), s), vec_boosters.end());
             achi_sprinter = true;
             break;

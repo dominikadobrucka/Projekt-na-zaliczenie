@@ -15,6 +15,11 @@ private:
     sf::SoundBuffer loseBuffer;
     sf::Sound loseSound;
 
+    sf::SoundBuffer halucynekBuffer;
+    sf::Sound halucynekSound;
+    sf::SoundBuffer boosterBuffer;
+    sf::Sound boosterSound;
+
 public:
     GameAudio() {
         if (!backgroundMusic.openFromFile("soundtrack_dzwiek.mp3")) {
@@ -44,6 +49,19 @@ public:
             loseSound.setBuffer(loseBuffer);
             loseSound.setVolume(100);     
         }
+        if (!halucynekBuffer.loadFromFile("halucynowanie.mp3")) {
+            std::cout << "Blad ladowania dzwieku halucynowanie.mp3!" << std::endl;
+        } else {
+            halucynekSound.setBuffer(halucynekBuffer);
+            halucynekSound.setVolume(70);     
+        }
+
+        if (!boosterBuffer.loadFromFile("boost.mp3")) {
+            std::cout << "Blad ladowania dzwieku boost.mp3!" << std::endl;
+        } else {
+            boosterSound.setBuffer(boosterBuffer);
+            boosterSound.setVolume(70);     
+        }
     }
 
     void playMusic() {
@@ -62,6 +80,13 @@ public:
 
     void playLose() {
         loseSound.play();
+    }
+    void playHalucynek() {
+        halucynekSound.play();
+    }
+
+    void playBooster() {
+        boosterSound.play();
     }
 };
 

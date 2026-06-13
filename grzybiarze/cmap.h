@@ -18,6 +18,17 @@ public:
     void check_collisions(GameAudio& audio);
     void reset();
     void save_data();
+    int podajPunkty() {
+        return punkty_gracza;
+    }
+    // --- ZMIENNE DO OSIĄGNIĘĆ ---
+    bool achi_perfekcjonista = false;
+    bool achi_halucynek = false;
+    bool achi_sprinter = false;
+    int wejscia_w_krzaki = 0;
+    int zjedzone_dobre = 0;
+    int zjedzone_zle = 0;
+    bool bylem_w_krzaku = false;
 
 private:
     sf::RenderWindow& window;

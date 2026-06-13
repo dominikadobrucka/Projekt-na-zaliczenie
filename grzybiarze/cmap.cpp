@@ -156,6 +156,7 @@ bool Cmap::check_updates(sf::Time elapsed, double game_timer, GameAudio& audio)
             game_over_text.setCharacterSize(28);
             game_over_text.setString("WYGRANA!\nWszystkie jadalne grzyby zebrane!\nWcisnij ENTER aby wrocic");
             game_over_text.setPosition(200.f, 400.f);
+            achi_perfekcjonista = true;
             
             audio.playWin();
         }
@@ -205,15 +206,18 @@ void Cmap::check_collisions(GameAudio& audio)
         {
             punkty_gracza += s->Get_points();
             audio.playCollect();
-            if (s->Get_points() > 0)
-            {
+            if (s->Get_points() > 0) {
                 jadalne_na_mapie--;
+                zjedzone_dobre++;
+            } else {
+                zjedzone_zle++;
             }
 
             if (s->Get_type() == "halucynek")
             {
                 my_character->set_speed(500);
-                slow_timer = 5.0; 
+                slow_timer = 5.0;
+                achi_halucynek = true;
             }
 
             vec_mushrooms.erase(std::remove(vec_mushrooms.begin(), vec_mushrooms.end(), s), vec_mushrooms.end());
@@ -228,6 +232,7 @@ void Cmap::check_collisions(GameAudio& audio)
             my_character->add_booster();
             audio.playCollect();
             vec_boosters.erase(std::remove(vec_boosters.begin(), vec_boosters.end(), s), vec_boosters.end());
+            achi_sprinter = true;
             break;
         }
     }
@@ -238,6 +243,11 @@ void Cmap::check_collisions(GameAudio& audio)
         if(boundingBox.intersects(s->getGlobalBounds()))
         {
             w_krzaku = true;
+
+            if (w_krzaku && !bylem_w_krzaku) {
+                wejscia_w_krzaki++;
+            }
+            bylem_w_krzaku = w_krzaku;
         }
     }
 
